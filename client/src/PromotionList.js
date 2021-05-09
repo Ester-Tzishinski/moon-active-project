@@ -8,7 +8,6 @@ class Scroll2 extends Component {
     super(props);
     this.state = { promotions: [], items: 20, hasMoreItems: true, index: 0 };
   }
-  
   componentDidMount() {
     this.setState({ isLoading: true });
     fetch('api/schema')
