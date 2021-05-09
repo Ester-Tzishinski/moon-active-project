@@ -13,6 +13,15 @@ class Scroll2 extends Component {
     fetch('api/schema')
       .then(response => response.json())
       .then(schema => this.setState({ promotionCoulmn: schema, isLoading: false }));
+    fetch('/api/promotions', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+    this.props.history.push('/promotions');
+
     // fetch('api/promotions')
     //     .then(response => response.json())
     //     .then(data => this.setState({ promotions: data, isLoading: false }));
@@ -87,12 +96,12 @@ class Scroll2 extends Component {
     // items.push(<li key={i}> Item {i} </li>);
     promotions.map(item => (
       items.push(
-        <tr key={item._id}>{
-         <td> <input type="checkbox"></input>
-         </td>,
-          Object.values(item).map(value =>
-            <td key={value}>{item._id != value ? value : ''}</td>
-          )}<td>
+        <tr key={item._id}>
+          <td><input type="checkbox"></input>
+          </td>{
+            Object.values(item).map(value =>
+              <td key={value}>{item._id !== value ? value : ''}</td>
+            )}<td>
             <ButtonGroup>
               <Button size="sm" color="primary" tag={Link} to={"/promotions/" + item._id}>Edit</Button>
               <Button size="sm" color="" onClick={() => this.duplicate(item._id)}>Duplicate</Button>
@@ -121,12 +130,13 @@ class Scroll2 extends Component {
     ))
     keys.map((item) => (
       item.map(a => {
-        if (!columns.some(val => val === a)) {
+        if (!columns.some(val => val === a) && a != '_id') {
           columns.push(a);
         }
       })))
     const col = columns.map(coulmn =>
-      <th>{'_id' != coulmn ? coulmn : ''}</th>
+      <th key={coulmn} style={{ width: '50px' }}>{coulmn}</th>
+      // <th key={coulmn} style={{ width: '50px' }}>{'_id' !== coulmn ? coulmn : ''}</th>
     )
     return (
       <div>
@@ -138,19 +148,22 @@ class Scroll2 extends Component {
           <h3>Promotion List</h3>
           <Table className="mt-4">
             <thead>
-              <td>{col}</td>
+              <tr>{col}</tr>
             </thead>
             <tbody>
-              <div style={{ height: '500px', overflow: 'auto' }}>
+              {/* <div style={{ height: '500px', overflow: 'auto' }}> */}
+              <span style={{ height: '500px', overflow: 'auto' }}>
                 <InfiniteScroll
                   // isReverse
                   loadMore={this.loadMore.bind(this)}
                   hasMore={this.state.hasMoreItems}
-                  loader={<div className="loader"> Loading... </div>}
+                  // loader={<div className="loader"> Loading... </div>}
+                  loader={<span className="loader"> Loading... </span>}
                   useWindow={false}>
                   {this.showItems()}{" "}
                 </InfiniteScroll>{" "}
-              </div>{" "}
+              </span>{" "}
+              {/* </div>{" "} */}
             </tbody>
           </Table>
         </Container>

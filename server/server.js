@@ -29,49 +29,46 @@ let names = [], types = [], o = [], myPromotions = [], mySchema = [];
 Schema.find({}, { '_id': 0 }).then(schemaInfos => {
   mySchema = JSON.stringify(schemaInfos);
   mySchema = JSON.parse(mySchema);
-  mySchema.map(v => (
-    names.push(v.fieldName),
-    types.push(v.type)
-  ))
-  console.log("names", names);
-  console.log("tyes", types)
-  for (let i = 0; i < 2; i++) {
-    const promotion = new Promotion();
-    for (let j = 0; j < names.length; j++) {
-      switch (types[j]) {
-        case 'Number':
-          promotion.names[j] = Math.floor((Math.random() + 1) * 10);
-          break;
-        case 'String':
-          promotion[names[j]] = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 7);
-          break;
-        case 'Date':
-          promotion[names[j]] = new Date();
-          break;
-        case 'enum':
-          e = Math.floor((Math.random()) * 3);
-          switch (e) {
-            case 0:
-              promotion[names[j]] = 'Basic'
-              break;
-            case 1:
-              promotion[names[j]] = 'Common'
-              break;
-            case 2:
-              promotion[names[j]] = 'Epic'
-              break;
-          }
-          break;
-      }
-
-      console.log("ppppppppppppppp", promotion[names[j]]);
-    }
-    promotion.save();
-    // myPromotions.push(promotion);
-    // console.log("++++my promotions", myPromotions);
-    // Promotion.create([myPromotions])
-  }
+  // for (let i = 0; i < 2; i++) {
+  //   let promotion = {};
+  //   for (let j = 0; j < mySchema.length; j++) {
+  //     const myName = mySchema[j].fieldName;
+  //     console.log("name", myName);
+  //     switch (mySchema[j].type) {
+  //       case 'Number':
+  //         promotion[myName] = Math.floor((Math.random() + 1) * 10);
+  //         break;
+  //       case 'String': {
+  //         // promotion[names[j]] = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 7);
+  //         promotion[myName] = (i + 1).toString();
+  //       }
+  //         break;
+  //       case 'Date':
+  //         promotion[myName] = new Date();
+  //         break;
+  //       case 'enum':
+  //         e = Math.floor((Math.random()) * 3);
+  //         switch (e) {
+  //           case 0:
+  //             promotion[myName] = 'Basic'
+  //             break;
+  //           case 1:
+  //             promotion[myName] = 'Common'
+  //             break;
+  //           case 2:
+  //             promotion[myName] = 'Epic'
+  //             break;
+  //         }
+  //         break;
+  //     }
+  //   }
+  //   promotion = new Promotion(promotion);
+  //   console.log("new promotion", promotion);
+  //   promotion.save();
+  //   // Promotion.create([myPromotions])
+  // }
 })
+
 require('./app/routes/promotion.router.js')(app);
 require('./app/routes/schema.router.js')(app);
 var server = app.listen(8080, function () {

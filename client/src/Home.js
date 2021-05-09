@@ -11,7 +11,7 @@ class Home extends Component {
       <div>
         <AppNavbar />
         <Container fluid>
-          <Button color="link"><Link to="/promotions">Manage promotion List</Link></Button>
+          <Button ><Link to="/promotions">Manage promotion List</Link></Button>
           {/* <Scroll2 /> */}
         </Container>
       </div>
