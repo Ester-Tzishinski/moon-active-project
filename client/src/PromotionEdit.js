@@ -58,7 +58,7 @@ class PromotionEdit extends Component {
 
   render() {
     const { promotionCoulmn, item } = this.state;
-    const title = <h2>{item.id ? 'Edit Promotion' : 'Add Promotion'}</h2>;
+    const title = <h2>{item._id ? 'Edit Promotion' : 'Add Promotion'}</h2>;
     console.log("promotionCoulmn edit", promotionCoulmn);
     const fields = promotionCoulmn.map(fields => (
       // console.log("fields",fields.fieldName)

@@ -13,9 +13,11 @@ exports.createPromotion = (req, res) => {
   });
 };
 exports.promotions = async (req, res) => {
-  const item = req.params.index;
-  let i = Number.parseInt(item)
-  await Promotion.find().select('-__v').skip(i).limit(30).then(promotionInfos => {
+  const index = req.params.index;
+  let i = Number.parseInt(index)
+  console.log("index", i);
+  console.log((i - 1) * 30, i * 30);
+  await Promotion.find().select('-__v').skip((i - 1) * 30).limit(i * 30).then(promotionInfos => {
     // await Promotion.find().select('-__v').limit(i + 10).then(promotionInfos => {
     res.status(200).json(promotionInfos);
   }).catch(error => {
@@ -96,7 +98,6 @@ exports.deletePromotion = (req, res) => {
     });
 };
 exports.makePromotions = (req, res) => {
-  // const allPromotions = [];
   Schema.find({}, { '_id': 0 }).then(schemaInfos => {
     const mySchema = JSON.parse(JSON.stringify(schemaInfos));
     res.status(200);
@@ -132,8 +133,6 @@ exports.makePromotions = (req, res) => {
         }
       }
       promotion = new Promotion(promotion);
-      // console.log("new promotion", promotion);
-      // allPromotions.push(promotion);
       promotion.save().then(data => {
         res.status(200).json(data);
       }).catch(err => {
@@ -144,12 +143,4 @@ exports.makePromotions = (req, res) => {
       });
     }
   })
-  // Promotion.create(allPromotions).then(data => {
-  //   res.status(200).json(data);
-  // }).catch(err => {
-  //   res.status(500).json({
-  //     message: "Fail!",
-  //     error: err.message
-  //   });
-  // });
 }
