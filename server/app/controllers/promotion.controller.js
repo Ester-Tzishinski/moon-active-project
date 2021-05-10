@@ -112,7 +112,7 @@ exports.makePromotions = (req, res) => {
             promotion[myName] = Math.floor((Math.random() + 1) * 10);
             break;
           case 'String': {
-            promotion[myName] = myName + ' ' + i.toString();
+            promotion[myName] = `${myName} ${i.toString()}`
           }
             break;
           case 'Date':

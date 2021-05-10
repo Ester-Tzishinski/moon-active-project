@@ -26,21 +26,24 @@ class PromotionList extends Component {
     this.fetchItems(this.state.pageNumber);
   }
 
-  async handleScroll(e) {
+  handleScroll(e) {
     const { pageNumber, flag } = this.state;
     const top = e.target.scrollTop < 50;
     const bottom = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight < 100;
-    if (bottom && !flag)
+    if (bottom && !flag) {
       this.setState({ pageNumber: pageNumber + 1 });
+    }
     else
-      if (top && !flag)
+      if (top && !flag) {
         if (pageNumber > 1)
           this.setState({ pageNumber: pageNumber - 1 });
-    if (bottom || top)
+      }
+    if (bottom || top) {
       this.fetchItems(pageNumber);
+    }
   }
 
-  async fetchItems(pageNumber) {
+  fetchItems(pageNumber) {
     this.setState({ flag: true });
     fetch(`api/promotions/${pageNumber}`)
       .then(response => {
@@ -52,8 +55,8 @@ class PromotionList extends Component {
       )
   }
 
-  async duplicate(item) {
-    await fetch(`/api/promotion/duplicate`, {
+  duplicate(item) {
+    fetch(`/api/promotion/duplicate`, {
       method: 'POST',
       body: JSON.stringify(item),
       headers: {
@@ -65,8 +68,8 @@ class PromotionList extends Component {
     });
   }
 
-  async remove(id) {
-    await fetch(`/api/promotion/${id}`, {
+  remove(id) {
+    fetch(`/api/promotion/${id}`, {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',

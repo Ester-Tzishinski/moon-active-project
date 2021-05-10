@@ -30,10 +30,10 @@ class PromotionEdit extends Component {
     this.setState({ item });
   }
 
-  async handleSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
     const { item } = this.state;
-    await fetch('/api/promotion', {
+    fetch('/api/promotion', {
       method: (item._id) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',
