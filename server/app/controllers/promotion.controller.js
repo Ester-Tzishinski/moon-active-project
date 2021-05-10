@@ -12,16 +12,15 @@ exports.createPromotion = (req, res) => {
     });
   });
 };
+
 exports.promotions = async (req, res) => {
   const index = req.params.index;
-  let i = Number.parseInt(index)
+  const i = Number.parseInt(index)
   console.log("index", i);
   console.log((i - 1) * 30, i * 30);
   await Promotion.find().select('-__v').skip((i - 1) * 30).limit(i * 30).then(promotionInfos => {
-    // await Promotion.find().select('-__v').limit(i + 10).then(promotionInfos => {
     res.status(200).json(promotionInfos);
   }).catch(error => {
-    // log on console
     console.log(error);
     res.status(500).json({
       message: "Error!",
@@ -29,6 +28,7 @@ exports.promotions = async (req, res) => {
     });
   });
 };
+
 exports.getPromotion = (req, res) => {
   Promotion.findById(req.params.id).select('-__v')
     .then(promotion => {
@@ -46,10 +46,10 @@ exports.getPromotion = (req, res) => {
       });
     });
 };
+
 exports.duplicatePromotion = (req, res) => {
   delete req.body._id;
   const promotion = new Promotion(req.body);
-  // Save a Promotion in the MongoDB
   promotion.save().then(data => {
     res.status(200).json(data);
   }).catch(err => {
@@ -59,6 +59,7 @@ exports.duplicatePromotion = (req, res) => {
     });
   });
 }
+
 exports.updatePromotion = (req, res) => {
   Promotion.findByIdAndUpdate(req.body._id, req.body
   ).select('-__v')
@@ -69,7 +70,6 @@ exports.updatePromotion = (req, res) => {
           error: "Not Found!"
         });
       }
-
       res.status(200).json(promotion);
     }).catch(err => {
       return res.status(500).send({
@@ -78,9 +78,9 @@ exports.updatePromotion = (req, res) => {
       });
     });
 };
-exports.deletePromotion = (req, res) => {
-  let promotionId = req.params.id
 
+exports.deletePromotion = (req, res) => {
+  const promotionId = req.params.id
   Promotion.findByIdAndRemove(promotionId).select('-__v -_id')
     .then(promotion => {
       if (!promotion) {
@@ -97,11 +97,12 @@ exports.deletePromotion = (req, res) => {
       });
     });
 };
+
 exports.makePromotions = (req, res) => {
   Schema.find({}, { '_id': 0 }).then(schemaInfos => {
     const mySchema = JSON.parse(JSON.stringify(schemaInfos));
     res.status(200);
-    for (let i = 0; i < 100; i++) {
+    for (const i = 0; i < 100; i++) {
       let promotion = {};
       for (let j = 0; j < mySchema.length; j++) {
         const myName = mySchema[j].fieldName;
@@ -120,13 +121,13 @@ exports.makePromotions = (req, res) => {
             e = Math.floor((Math.random()) * 3);
             switch (e) {
               case 0:
-                promotion[myName] = 'Basic'
+                promotion[myName] = mySchema[j].enum[0]
                 break;
               case 1:
-                promotion[myName] = 'Common'
+                promotion[myName] = mySchema[j].enum[2]
                 break;
               case 2:
-                promotion[myName] = 'Epic'
+                promotion[myName] = mySchema[j].enum[2]
                 break;
             }
             break;
@@ -134,13 +135,8 @@ exports.makePromotions = (req, res) => {
       }
       promotion = new Promotion(promotion);
       promotion.save().then(data => {
-        res.status(200).json(data);
-      }).catch(err => {
-        res.status(500).json({
-          message: "Fail!",
-          error: err.message
-        });
-      });
+        res.status(200)
+      })
     }
   })
 }
