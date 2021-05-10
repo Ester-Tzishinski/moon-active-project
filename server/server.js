@@ -9,10 +9,6 @@ const { json } = require('body-parser');
 
 mongoose.Promise = global.Promise;
 
-app.get('/promotion', function (req, res) {
-  res.header("Content-Type", 'application/json');
-  res.send(JSON.stringify(promotion));
-})
 mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(async () => {
     console.log("Successfully connected to MongoDB.");

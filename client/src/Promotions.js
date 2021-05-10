@@ -6,7 +6,7 @@ class PromotionList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { promotions: [], isLoading: true, column: [], pageNumber: 1 };
+    this.state = { promotions: [], isLoading: true, column: [], pageNumber: 1, flag: false };
     this.remove = this.remove.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
   }
@@ -27,32 +27,28 @@ class PromotionList extends Component {
   }
 
   async handleScroll(e) {
-    console.log("target", e.target)
-    const pageNumber = this.state.pageNumber;
+    const { pageNumber, flag } = this.state;
     const top = e.target.scrollTop < 50;
-    const bottom = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight < 50;
-    console.log('bottommmmm', bottom)
-    console.log('toppppppppp', top)
+    const bottom = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight < 100;
     if (bottom || top) {
-      if (Button)
+      if (bottom && !flag)
         this.setState({ pageNumber: pageNumber + 1 });
       else
-        if (top) {
-          debugger;
-          this.setState({ pageNumber: pageNumber - 1 });
-        }
-      console.log("pppppppppppppppppppppppp", pageNumber);
+        if (top && !flag)
+          if (pageNumber > 1)
+            this.setState({ pageNumber: pageNumber - 1 });
       this.fetchItems(pageNumber);
     }
   }
 
   async fetchItems(pageNumber) {
+    this.setState({ flag: true });
     fetch(`api/promotions/${pageNumber}`)
       .then(response => {
         return response.json()
       })
       .then(data => {
-        return this.setState({ promotions: data, isLoading: false })
+        return this.setState({ promotions: data, isLoading: false, flag: false })
       }
       )
   }
@@ -78,7 +74,6 @@ class PromotionList extends Component {
         'Content-Type': 'application/json'
       }
     }).then(() => {
-      console.log("Remove Done!");
       const updatedPromotions = [...this.state.promotions].filter(i => i._id !== id);
       this.setState({ promotions: updatedPromotions });
     });

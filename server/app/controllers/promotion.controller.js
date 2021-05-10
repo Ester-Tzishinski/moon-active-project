@@ -14,20 +14,21 @@ exports.createPromotion = (req, res) => {
 };
 
 exports.promotions = async (req, res) => {
-  const index = req.params.index;
-  const i = Number.parseInt(index)
-  console.log("index", i);
-  console.log((i - 1) * 30, i * 30);
-  await Promotion.find().select('-__v').skip((i - 1) * 30).limit(i * 30).then(promotionInfos => {
-    res.status(200).json(promotionInfos);
-  }).catch(error => {
+  try {
+    const index = Number.parseInt(req.params.index);
+    console.log("index", index);
+    console.log((index - 1) * 30, index * 30);
+    const promotionInfos = await Promotion.find().select('-__v').skip((index - 1) * 30).limit(30);
+    return res.status(200).json(promotionInfos);
+  } catch (error) {
     console.log(error);
     res.status(500).json({
       message: "Error!",
       error: error
     });
-  });
+  };
 };
+
 
 exports.getPromotion = (req, res) => {
   Promotion.findById(req.params.id).select('-__v')
@@ -102,7 +103,7 @@ exports.makePromotions = (req, res) => {
   Schema.find({}, { '_id': 0 }).then(schemaInfos => {
     const mySchema = JSON.parse(JSON.stringify(schemaInfos));
     res.status(200);
-    for (const i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i++) {
       let promotion = {};
       for (let j = 0; j < mySchema.length; j++) {
         const myName = mySchema[j].fieldName;
@@ -124,7 +125,7 @@ exports.makePromotions = (req, res) => {
                 promotion[myName] = mySchema[j].enum[0]
                 break;
               case 1:
-                promotion[myName] = mySchema[j].enum[2]
+                promotion[myName] = mySchema[j].enum[1]
                 break;
               case 2:
                 promotion[myName] = mySchema[j].enum[2]
