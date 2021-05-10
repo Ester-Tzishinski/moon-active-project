@@ -30,15 +30,14 @@ class PromotionList extends Component {
     const { pageNumber, flag } = this.state;
     const top = e.target.scrollTop < 50;
     const bottom = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight < 100;
-    if (bottom || top) {
-      if (bottom && !flag)
-        this.setState({ pageNumber: pageNumber + 1 });
-      else
-        if (top && !flag)
-          if (pageNumber > 1)
-            this.setState({ pageNumber: pageNumber - 1 });
+    if (bottom && !flag)
+      this.setState({ pageNumber: pageNumber + 1 });
+    else
+      if (top && !flag)
+        if (pageNumber > 1)
+          this.setState({ pageNumber: pageNumber - 1 });
+    if (bottom || top)
       this.fetchItems(pageNumber);
-    }
   }
 
   async fetchItems(pageNumber) {
